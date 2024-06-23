@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Button, TextField } from "@mui/material";
+import { DesktopDatePicker , LocalizationProvider} from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 class AddTodo extends Component {
   // Create a local react state of the this component with both content date property set to nothing.
@@ -7,7 +9,8 @@ class AddTodo extends Component {
     super();
     this.state = {
       content: "",
-      date: ""
+      date: "",
+      due: null
     };
   }
   // The handleChange function updates the react state with the new input value provided from the user and the current date/time.
@@ -17,6 +20,14 @@ class AddTodo extends Component {
     this.setState({
       content: event.target.value,
       date: Date().toLocaleString('en-US')
+    });
+  };
+  // The handleDueDate function updates the react state with the new due date provided from the user.
+  // "newDueDate" is the due date the user decides. In this case, the newDate is triggered when the user types a date
+  // into the text field.
+  handleDueDate = (newDueDate) => {
+    this.setState({
+      due: newDueDate
     });
   };
   // The handleSubmit function collects the forms input and puts it into the react state.
@@ -29,7 +40,8 @@ class AddTodo extends Component {
       this.props.addTodo(this.state);
       this.setState({
         content: "",
-        date: ""
+        date: "",
+        due: null
       });
     }
   };
@@ -49,6 +61,14 @@ class AddTodo extends Component {
           onChange={this.handleChange}
           value={this.state.content}
         />
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <DesktopDatePicker
+            label="Due Date"
+            value={this.state.due}
+            onChange={this.handleDueDate}
+            renderInput={(params) => <TextField {...params} />}
+          />
+        </LocalizationProvider>
         <Button
           style={{ marginLeft: "10px" }}
           onClick={this.handleSubmit}

@@ -27,7 +27,7 @@ class AddTodo extends Component {
   // into the text field.
   handleDueDate = (newDueDate) => {
     this.setState({
-      due: newDueDate
+      due: new Date(newDueDate).toLocaleDateString().padStart(2, '0')
     });
   };
   // The handleSubmit function collects the forms input and puts it into the react state.
@@ -58,11 +58,13 @@ class AddTodo extends Component {
         <TextField
           label="Add New Item"
           variant="outlined"
+          data-testid="new-item-input"
           onChange={this.handleChange}
           value={this.state.content}
         />
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DesktopDatePicker
+            id="new-item-date"
             label="Due Date"
             value={this.state.due}
             onChange={this.handleDueDate}
@@ -70,6 +72,7 @@ class AddTodo extends Component {
           />
         </LocalizationProvider>
         <Button
+          data-testid="new-item-button"
           style={{ marginLeft: "10px" }}
           onClick={this.handleSubmit}
           variant="contained"
